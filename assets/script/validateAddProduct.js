@@ -15,9 +15,6 @@ Validator({
     currentData: addProduct.product,
     rules: [
         Validator.isRequired('#name'),
-        Validator.isRequired('#size'),
-        Validator.isRequired('#quantity'),
-        Validator.minValue('#quantity', 1),
         Validator.isRequired('#price'),
         Validator.minValue('#price', 1000),
         Validator.isRequired('#description'),

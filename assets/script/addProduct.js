@@ -1,13 +1,8 @@
 const submitButton = document.querySelector('#button-submit');
 const nameProduct = document.querySelector('#name');
-const quantityProduct = document.querySelector('#quantity');
 const priceProduct = document.querySelector('#price');
 const sizeProduct = document.querySelector('#size');
 const descBox = document.querySelector('#description');
-const genderList = document.querySelector('#gender');
-const genderCurrent = document.querySelector('#current-value-gender');
-const categoryList = document.querySelector('#category');
-const categoryCurrent = document.querySelector('#current-value-category');
 const materialList = document.querySelector('#material');
 const materialCurrent = document.querySelector('#current-value-material');
 const buttonSubmit = document.querySelector('#button-submit');
@@ -18,30 +13,16 @@ const addProduct = {
         id: new Date().getTime(),
         image: 'https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.webp',
         imageColor: [],
-        category: Object.keys(CATEGORY_OPTION)[0] || null,
-        gender: Object.keys(GENDER_OPTION)[0] || null,
         material: Object.keys(MATERIAL_OPTION)[0] || null,
     },
 
     handleEvent() {
-        this.renderSelectOption({
-            list: categoryList,
-            option: CATEGORY_OPTION,
-            currentValue: categoryCurrent,
-        });
-        this.renderSelectOption({
-            list: genderList,
-            option: GENDER_OPTION,
-            currentValue: genderCurrent,
-        });
         this.renderSelectOption({
             list: materialList,
             option: MATERIAL_OPTION,
             currentValue: materialCurrent,
         });
 
-        this.changeSelect(categoryList, categoryCurrent, 'category');
-        this.changeSelect(genderList, genderCurrent, 'gender');
         this.changeSelect(materialList, materialCurrent, 'material');
     },
 
@@ -95,22 +76,8 @@ const addProduct = {
         const product = this.products[index];
 
         nameProduct.value = product.name;
-        quantityProduct.value = product.quantity;
-        sizeProduct.value = product.size;
         priceProduct.value = product.price;
         description.value = product.description;
-        this.changeOption(
-            categoryCurrent,
-            CATEGORY_OPTION,
-            product.category,
-            'category',
-        );
-        this.changeOption(
-            genderCurrent,
-            GENDER_OPTION,
-            product.gender,
-            'gender',
-        );
         this.changeOption(
             materialCurrent,
             MATERIAL_OPTION,
