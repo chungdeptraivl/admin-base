@@ -626,11 +626,3 @@ html {
       flex-direction: column;
     }
   }
-
-  @media screen and (max-width: 930px) {
-    .country-price,
-    .input-wrapper.input-wrapper-3 {
-      display: flex;
-      flex-direction: column;
-    }
-  }
