@@ -7,33 +7,18 @@ const setItemLocalStorage = (name, value) => {
 };
 
 const goCategory = () => {
-    window.location = `${window.location.origin}/index.html`;
-};
-
-// Category
-const CATEGORY_OPTION = {
-    'quan-ao': 'Quần áo',
-    'do-lot': 'Đồ lót',
-    'bit-tat': 'Bít tất',
-    'dac-biet': 'Sản phẩm đặc biệt',
-};
-
-const GENDER_OPTION = {
-    0: 'Female',
-    1: 'Male',
-    2: 'Unisex',
+    window.location = `${window.location.origin}./category.html`;
 };
 
 const MATERIAL_OPTION = {
-    0: 'Acrylic & Rayon (Giữ nhiệt)',
-    1: 'Cotton',
-    2: 'Cotton & Modal',
-    3: 'Cotton tencel',
-    4: 'Cotton USA',
-    5: 'Modal',
-    6: 'PE microfiber',
-    7: 'Polyamide',
-    8: 'Polyamide & Elastane',
-    9: 'Seamless',
-    10: 'Tencel & Polyester',
+    0: 'Viet Nam',
+    1: 'Thailand',
+    2: 'Japan',
+    3: 'Spain',
+    4: 'Greece',
+    5: 'India',
+    6: 'France',
+    7: 'Mexico',
+    8: 'Italy',
+    9: 'United States of America',
 };

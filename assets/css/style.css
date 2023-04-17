@@ -16,7 +16,7 @@ body {
 
 /* SIDEBAR */
 #sidebar {
-  position: fixed;
+  position: fixed; 
   top: 0;
   left: 0;
   width: 280px;
@@ -299,6 +299,8 @@ body {
   color: var(--blue);
   pointer-events: unset;
 }
+
+/* head content */
 #content main .head-title .btn-download {
   height: 36px;
   padding: 0 16px;
