@@ -6,6 +6,7 @@ html {
     --light: #0c0c1e;
     --grey: #060714;
     --dark: #fbfbfb;
+    --white: #060714;
   }
   
   body {
@@ -381,7 +382,6 @@ html {
     justify-content: space-between;
     padding: 8px 16px;
     border-radius: 4px;
-    background: var(--white);
     cursor: pointer;
     border: 1px solid transparent;
 }
@@ -391,7 +391,7 @@ html {
     top: 110%;
     left: 0;
     right: 0;
-    background: var(--white);
+    background: var(--grey);
     border-radius: 4px;
     opacity: 0;
     visibility: hidden;
@@ -433,7 +433,6 @@ html {
     height: 300px;
     width: 100%;
     border-radius: 10px;
-    background: #fff;
     border: 2px dashed var(--dark-grey);
     display: flex;
     align-items: center;

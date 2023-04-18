@@ -7,7 +7,7 @@ const setItemLocalStorage = (name, value) => {
 };
 
 const goCategory = () => {
-    window.location = `${window.location.origin}./category.html`;
+    window.location.href = `${window.location.origin}/category.html`;
 };
 
 const MATERIAL_OPTION = {

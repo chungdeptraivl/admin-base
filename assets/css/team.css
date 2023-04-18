@@ -299,171 +299,82 @@ body {
   pointer-events: unset;
 }
 
-
-/* main content */
-
-/* ------------------------------------ Content ------------------------------------ */
-.add-product {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 24px;
-    border-radius: 20px;
-    background:var(--light);
-    color: var(--primary);
-    box-shadow: 0 4px 8px rgb(0 0 0 / 5%);
-    cursor: pointer;
-    transition: color 0.25s linear;
-}
-
-.add-product:hover .add-product-icon,
-.add-product:hover {
-    color: var(--blue);
-}
-
-.add-product.active {
-    display: flex;
-}
-
-.add-product-icon {
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    width: 50px;
-    color: var(--primary);
-    border-radius: 50%;
-    border: 2px dashed;
-    font-size: 24px;
-    margin-bottom: 8px;
-    transition: color 0.2s linear;
-}
-
-.table-data {
+#team {
     margin-top: 24px;
-    width: 100%;
-    color: var(--dark);
-    border-radius: 20px;
-    background: var(--light);
-    padding: 24px;
-    overflow-x: auto;
 }
 
-.head {
+.row {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
+    flex-wrap: wrap;
+    padding: 2em 1em;
+    text-align: center;
 }
 
-.head h3 {
-    font-size: 24px;
+.column {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0.5em 0;
+}
+
+#content h1 {
+    width: 100%;
+    text-align: center;
+    font-size: 3.5em;
+    color: #1f003b;
+}
+
+.card {
+    box-shadow: 0 0 2.2em rgba(25, 0, 58, 0.15);
+    padding: 3.5em 1em;
+    border-radius: 0.6em;
+    color: #1f003b;
+    cursor: pointer;
+}
+
+.card .img-container {
+    width: 8em;
+    height: 8em;
+    background-color: #a993ff;
+    padding: 0.5em;
+    border-radius: 50%;
+    margin: 0 auto 2em auto;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 50% ;
+}
+
+.card h3 {
     font-weight: 600;
 }
 
-.table-actions {
-    font-size: 24px;
+.card p {
+    font-weight: 500;
+    text-transform: uppercase;
+    margin: 0.5em 0 2em 0;
+    letter-spacing: 2px;
 }
 
-.table-actions i:first-child {
-    margin-right: 8px;
-}
-
-
-/* ---------------------------------- Table ---------------------------------- */
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-table th {
-    padding-bottom: 12px;
-    font-size: 13px;
-    text-align: left;
-    border-bottom: 1px solid var(--grey);
-    text-align: center;
-}
-
-table td:first-child {
+.icons {
+    width: 50%;
+    min-width: 180px;
+    margin: auto;
     display: flex;
-    align-items: center;
-    grid-gap: 12px;
-    padding-left: 6px;
+    justify-content: space-between;
+}
+.card a {
+    text-decoration: none;
+    color: inherit;
+    font-style: 1.4em;
 }
 
-table td:not(:nth-child(2)):not(:nth-child(4)) {
-    min-width: 80px;
+.icons i {
+    font-size: 22px;
+    color: #060714;
 }
-
-table td ~ td {
-    padding-left: 20px;
-}
-
-table td:nth-child(2) {
-    min-width: 200px;
-}
-
-table td.td-name {
-    padding: 16px;
-    padding-left: 0;
-}
-
-table td:not(.td-name) {
-    text-align: center;
-}
-
-table td.td-color {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    gap: 2px;
-}
-
-table td {
-    padding: 16px 0;
-    max-width: 425px;
-    word-break: break-word;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-table td img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-.table-name-link {
-    color: var(--dark);
-    display: block;
-}
-
-.table-name-link:hover {
-    color: var(--blue);
-    text-decoration: underline;
-}
-
-.actions-icon {
-    color: var(--primary);
-    cursor: pointer;
-    font-size: 28px;
-    transition: color 0.2s linear ;
-}
-
-.actions-icon i {
-    color: var(--primary);
-    transition: color 0.2s linear;
-}
-
-#edit:hover i {
-    color: var(--blue);
-}
-
-#remove:hover i {
-    color: var(--error);
-}
-
 /* responsive */
-
 @media screen and (max-width: 768px) {
   #sidebar {
     width: 200px;

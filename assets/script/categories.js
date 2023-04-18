@@ -1,7 +1,7 @@
 const tbody = document.querySelector("#tbody");
 
 const category = {
-  products: JSON.parse(localStorage.getItem("products")),
+  products: JSON.parse(localStorage.getItem("products")) || [],
 
   handleEvent() {},
   renderCategory() {
@@ -44,7 +44,7 @@ const category = {
                         />
                     </td>
                     <td>${product.quantity}</td>
-                    <td>${CATEGORY_OPTION[product.category]}</td>
+                    <td>a</td>
                     <td>${product.size}</td>
                     <td>${MATERIAL_OPTION[product.material]}</td>
                     <td id="edit" class="actions-icon"><a href="./addProduct.html?id=${
