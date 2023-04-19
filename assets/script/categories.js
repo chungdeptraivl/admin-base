@@ -1,75 +1,71 @@
-const tbody = document.querySelector("#tbody");
+const tbody = document.querySelector('#tbody');
 
 const category = {
-  products: JSON.parse(localStorage.getItem("products")) || [],
+    products: [],
 
-  handleEvent() {},
-  renderCategory() {
-    if (this.products.length <= 0) {
-      tbody.innerHTML = "Khong co san pham nao";
-      return;
-    }
+    handleEvent() {},
 
-    let row = ``;
+    renderCategory() {
+        if (this.products.length <= 0) {
+            tbody.innerHTML = 'Khong co danh sach san pham nao';
+            return;
+        }
 
-    this.products.forEach((product, i) => {
-      let price = product.price
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        let row = ``;
 
-      row += `
+        `
+        ${this.products.forEach((product, i) => {
+            row += `
                 <tr>
+                    <td>${i + 1}</td> 
+                    <td class="td-name">
+                        <a class="table-name-link" href="./addProduct.html?id=${
+                            product.id
+                        }">${product.name}</a>
+                    </td>
                     <td>
                         <img
-                            src="${product.image}"
+                            src="${product.icon}"
                             alt="${product.name}"
                         />
                     </td>
-                    <td class="td-name">
-                        <a class="table-name-link" href="./addProduct.html?id=${
-                          product.id
-                        }">${product.name}</a>
-                    </td>
-                    <td>${price}đ</td>
-                    <td class="td-color">
-                        <img
-                            src="https://i.pinimg.com/236x/ea/dc/39/eadc39909b3177de6a9d10f76cc90461.jpg"
-                            alt=""
-                        /><img
-                            src="https://i.pinimg.com/236x/ea/dc/39/eadc39909b3177de6a9d10f76cc90461.jpg"
-                            alt=""
-                        /><img
-                            src="https://i.pinimg.com/236x/ea/dc/39/eadc39909b3177de6a9d10f76cc90461.jpg"
-                            alt=""
-                        />
-                    </td>
-                    <td>${product.quantity}</td>
-                    <td>a</td>
-                    <td>${product.size}</td>
-                    <td>${MATERIAL_OPTION[product.material]}</td>
+                    <td>${product.createdAt}</td>
+                    <td>${product.updatedAt}</td>
+                    <td>${product.deletedAt}</td>
                     <td id="edit" class="actions-icon"><a href="./addProduct.html?id=${
-                      product.id
+                        product.id
                     }"><i class='bx bxs-message-square-edit'></i></a></td>
                     <td onclick="category.removeItem(${
-                      product.id
+                        product.id
                     })" id="remove" class="actions-icon"><i class='bx bxs-message-square-x'></i></td>
                 </tr>`;
 
-      tbody.innerHTML = row;
-    });
-  },
+            tbody.innerHTML = row;
+        })}
+        `;
+    },
 
-  removeItem(id) {
-    let index = this.products.findIndex((item) => item.id === id);
-    this.products.splice(index, 1);
-    localStorage.setItem("products", JSON.stringify(this.products));
-    this.renderCategory();
-  },
+    removeItem(id) {
+        let index = this.products.findIndex((item) => item.id === id);
+        this.products.splice(index, 1);
+        localStorage.setItem('products', JSON.stringify(this.products));
+        this.renderCategory();
+    },
 
-  start() {
-    this.renderCategory();
-    this.handleEvent();
-  },
+    start() {
+        this.renderCategory();
+        this.handleEvent();
+    },
 };
 
-category.start();
+axios
+    .get('http://localhost:8080/categories')
+    .then((response) => {
+        console.log(response.data.data);
+        CATEGORIES = response.data.data;
+        category.products = response.data.data;
+        category.start();
+    })
+    .catch((error) => {
+        console.error(error);
+    });

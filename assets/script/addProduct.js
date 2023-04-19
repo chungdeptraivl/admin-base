@@ -8,10 +8,10 @@ const materialCurrent = document.querySelector('#current-value-material');
 const buttonSubmit = document.querySelector('#button-submit');
 
 const addProduct = {
-    products: JSON.parse(localStorage.getItem('products')) || [],
+    products: CATEGORIES,
     product: {
         id: new Date().getTime(),
-        image: 'https://t3.ftcdn.net/jpg/04/34/72/82/360_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.webp',
+        image: '',
         imageColor: [],
         material: Object.keys(MATERIAL_OPTION)[0] || null,
     },
@@ -68,7 +68,7 @@ const addProduct = {
         let index = this.products.findIndex((item) => item.id === id);
 
         if (index < 0) {
-            alert('Không có sản phẩm này');
+            alert('Không có category này');
             goCategory();
         }
 

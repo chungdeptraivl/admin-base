@@ -6,14 +6,15 @@ const customBtn = document.querySelector('#custom-btn');
 const img = document.querySelector('#product-img');
 let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
 
-const ImgColor = document.querySelector('.input-wrapper.input-wrapper-3');
-
 const defaultBtnActive = () => {
     defaultBtn.click();
 };
 
-defaultBtn.addEventListener('change', function () {
-    const file = this.files[0];
+defaultBtn.addEventListener('change', (ev) => {
+    const file = ev.target.files[0];
+
+    const buttonElem = document.querySelector('#button-submit');
+    const urlElem = document.querySelector('#url-img');
 
     if (file) {
         const reader = new FileReader();
@@ -39,7 +40,25 @@ defaultBtn.addEventListener('change', function () {
         let valueStore = this.value.match(regExp);
         fileName.textContent = valueStore;
     }
+
+    const formData = new FormData();
+    formData.append('image', ev.target.files[0]);
+
+    fetch('https://api.imgur.com/3/image/', {
+        method: 'post',
+        headers: {
+            Authorization: 'Client-ID 59ab98495609928',
+        },
+        body: formData,
+    })
+        .then((data) => data.json())
+        .then((data) => {
+            console.log(data);
+            urlElem.value = data.data.link;
+            buttonElem.disabled = false;
+        });
 });
+
 
 const renderImgColor = () => {
     imgColorItem = ``;
@@ -74,23 +93,48 @@ const renderImgColor = () => {
                     <i class="bx bx-x"></i>
                 </div>
                 <div class="file-name">File name here</div>
-                <input type="file" class="default-btn-color" hidden />
+                <input type="file" id="file-input" hidden />
             </div>`;
     }
-
-    ImgColor.innerHTML = imgColorItem;
 };
+
 renderImgColor();
+
+function imageToUrl(fileSelector, buttonSubmitSelector) {
+    const fileElem = document.querySelector(fileSelector);
+    const buttonElem = document.querySelector(buttonSubmitSelector);
+    console.log(fileElem);
+    console.log(buttonElem);
+    fileElem.addEventListener('change', (ev) => {
+        const formdata = new FormData();
+        formdata.append('image', ev.target.files[0]);
+        console.log('aaaaaaaaaaaa');
+
+        fetch('https://api.imgur.com/3/image/', {
+            method: 'post',
+            headers: {
+                Authorization: 'Client-ID 59ab98495609928',
+            },
+            body: formdata,
+        })
+            .then((data) => data.json())
+            .then((data) => {
+                alert('image to url');
+                urlElem.value = data.data.link;
+                buttonElem.disabled = false;
+            });
+    });
+}
 
 function defaultBtnActiveColor(id, elem) {
     const wrapper = elem.closest('.input-img-wrapper.flex-1');
-    const cancelBtn = elem.closest('.input-img-wrapper.flex-1').querySelector('.cancel-btn');
-    const fileName = elem.closest('.input-img-wrapper.flex-1').querySelector('.file-name');
-    const defaultBtn = elem.closest('.input-img-wrapper.flex-1').querySelector('.default-btn-color');
-    const customBtn = elem.closest('.input-img-wrapper.flex-1').querySelector('.custom-btn-color');
-    const img = elem.closest('.input-img-wrapper.flex-1').querySelector('img');
+    const cancelBtn = wrapper.querySelector('.cancel-btn');
+    const fileName = wrapper.querySelector('.file-name');
+    const defaultBtn = wrapper.querySelector('.default-btn-color');
+    const customBtn = wrapper.querySelector('.custom-btn-color');
+    const img = wrapper.querySelector('img');
 
-    defaultBtn.click();
+    defaultBtn.click('#file-input', '#url-img');
 
     defaultBtn.addEventListener('change', function () {
         const file = this.files[0];

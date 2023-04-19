@@ -10,6 +10,8 @@ const goCategory = () => {
     window.location.href = `${window.location.origin}/category.html`;
 };
 
+let CATEGORIES = []
+
 const MATERIAL_OPTION = {
     0: 'Viet Nam',
     1: 'Thailand',

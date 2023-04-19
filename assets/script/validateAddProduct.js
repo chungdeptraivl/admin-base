@@ -19,17 +19,30 @@ Validator({
         Validator.minValue('#price', 1000),
         Validator.isRequired('#description'),
         Validator.maxLength('#description', 100),
+        Validator.isRequired('#url-img')
     ],
     onSubmit(data, currentData) {
-        const productInfo = { ...currentData, ...data };
-        if (id) {
-            addProduct.products[index] = productInfo;
-            setItemLocalStorage('products', addProduct.products);
-            goCategory();
-        } else {
-            addProduct.products.unshift(productInfo);
-            setItemLocalStorage('products', addProduct.products);
-            goCategory();
-        }
+        const rs = {
+            name: data.name,
+            icon: data["url-img"],
+        };
+
+        console.log(rs)
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        axios
+            .post('http://localhost:8080/categories', rs, config)
+            .then((response) => {
+                console.log(response.data);
+                goCategory();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     },
 });
