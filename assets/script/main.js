@@ -1,15 +1,209 @@
-let categories = []
+// Sidebar
+const sidebarItems = document.querySelectorAll('#sidebar ul li a');
+const MATERIAL_OPTION = {
+    0: 'Viet Nam',
+    1: 'Thailand',
+    2: 'Japan',
+    3: 'Spain',
+    4: 'Greece',
+    5: 'India',
+    6: 'France',
+    7: 'Mexico',
+    8: 'Italy',
+    9: 'United States of America',
+};
 
-axios
-        .get('http://localhost:8080/categories')
-        .then((response) => {
-            console.log("categories: ", response.data.data);
-            categories = response.data.data;
-        })
-        .catch((error) => {
-            console.error(error);
+const CATEGORIES = [];
+
+// Global function
+const setItemLocalStorage = (name, value) => {
+    localStorage.setItem(name, JSON.stringify(value));
+};
+
+const goCategory = () => {
+    window.location.href = `${window.location.origin}/category.html`;
+};
+
+let categories = [];
+
+// Validator
+function Validator(options) {
+    let selectorRules = {};
+
+    function getParent(element, selector) {
+        while (element.parentElement) {
+            if (element.parentElement.matches(selector)) {
+                return element.parentElement;
+            }
+            element = element.parentElement;
+        }
+    }
+
+    function validate(inputElement, rule) {
+        let errorElement = getParent(
+            inputElement,
+            options.formGroupSelector,
+        ).querySelector(options.errorSelector);
+        let errorMessage;
+        let rules = selectorRules[rule.selector];
+
+        for (let i = 0; i < rules.length; i++) {
+            errorMessage = rules[i](inputElement.value);
+
+            if (errorMessage) {
+                break;
+            }
+        }
+
+        if (errorMessage) {
+            errorElement.innerText = errorMessage;
+            getParent(inputElement, options.formGroupSelector).classList.add(
+                'invalid',
+            );
+        } else {
+            errorElement.innerText = '';
+            getParent(inputElement, options.formGroupSelector).classList.remove(
+                'invalid',
+            );
+        }
+
+        return !errorMessage;
+    }
+
+    let formElement = document.querySelector(options.form);
+    if (formElement) {
+        formElement.onsubmit = function (e) {
+            e.preventDefault();
+
+            let isFormValid = true;
+
+            options.rules.forEach((rule) => {
+                let inputElement = formElement.querySelector(rule.selector);
+                let isValid = validate(inputElement, rule);
+
+                if (!isValid) {
+                    isFormValid = false;
+                }
+            });
+
+            if (isFormValid) {
+                if (typeof options.onSubmit === 'function') {
+                    let enableInputs = formElement.querySelectorAll('[name]');
+                    let formValues = [...enableInputs].reduce(
+                        (values, input) => {
+                            values[input.name] = input.value;
+                            return values;
+                        },
+                        {},
+                    );
+                    options.onSubmit(formValues, options.currentData);
+                } else {
+                    formElement.submit();
+                }
+            }
+        };
+
+        options.rules.forEach((rule) => {
+            if (Array.isArray(selectorRules[rule.selector])) {
+                selectorRules[rule.selector].push(rule.test);
+            } else {
+                selectorRules[rule.selector] = [rule.test];
+            }
+
+            let inputElement = formElement.querySelector(rule.selector);
+
+            if (inputElement) {
+                inputElement.onblur = () => {
+                    validate(inputElement, rule);
+                };
+
+                inputElement.oninput = () => {
+                    let errorElement = getParent(
+                        inputElement,
+                        options.formGroupSelector,
+                    ).querySelector(options.errorSelector);
+                    errorElement.innerText = '';
+                    getParent(
+                        inputElement,
+                        options.formGroupSelector,
+                    ).classList.remove('invalid');
+                };
+            }
         });
+    }
+}
 
+Validator.isRequired = (selector) => ({
+    selector,
+    test(value) {
+        return value.trim() ? undefined : 'Vui lòng nhập trường này';
+    },
+});
+
+Validator.isEmail = (selector) => ({
+    selector,
+    test(value) {
+        let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        return regex.test(value) ? undefined : 'Trường này phải là email';
+    },
+});
+
+Validator.minLength = (selector, min) => ({
+    selector,
+    test(value) {
+        return value.length >= min
+            ? undefined
+            : `Vui lòng nhập tối thiểu ${min} ký tự`;
+    },
+});
+
+Validator.maxLength = (selector, max) => ({
+    selector,
+    test(value) {
+        return value.length <= max
+            ? undefined
+            : `Vui lòng nhập ít hơn ${max} ký tự`;
+    },
+});
+
+Validator.isConfirmed = (selector, getConfirmValue, message) => ({
+    selector,
+    test(value) {
+        return value === getConfirmValue
+            ? undefined
+            : message || 'Giá trị nhập vào không chính xác';
+    },
+});
+
+Validator.minValue = (selector, min, message) => ({
+    selector,
+    test(value) {
+        return value >= min ? undefined : message || `Phải lớn hơn ${min}`;
+    },
+});
+
+Validator.maxValue = (selector, max, message) => ({
+    selector,
+    test(value) {
+        return value <= max ? undefined : message || `Phải bé hơn ${max}`;
+    },
+});
+
+async function fetchCategories() {
+    try {
+        const response = await axios.get('http://localhost:8080/categories');
+        categories = response.data.data;
+        console.log('categories: ', categories);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+(async () => {
+    await fetchCategories();
+    await showDataInTable();
+})();
 
 // Xử lý responsive sidebar và chuyển giao diện sáng tối
 (function () {
@@ -86,22 +280,26 @@ axios
 })();
 
 // Xử lý khi thêm file ảnh
+const defaultBtnActive = () => {
+    const defaultBtn = document.querySelector('#default-btn');
+    if (defaultBtn) {
+        defaultBtn.click();
+    }
+};
+
 (function () {
     const wrapper = document.querySelector('.input-img-wrapper');
+    const defaultBtn = document.querySelector('#default-btn');
+
     if (!wrapper) {
         return;
     }
 
     const cancelBtn = document.querySelector('.cancel-btn');
     const fileName = document.querySelector('.file-name');
-    const defaultBtn = document.querySelector('#default-btn');
     const customBtn = document.querySelector('#custom-btn');
     const img = document.querySelector('#product-img');
     let regExp = /[0-9a-zA-Z\^\&\'\@\{\}\[\]\,\$\=\!\-\#\(\)\.\%\+\~\_ ]+$/;
-
-    const defaultBtnActive = () => {
-        defaultBtn.click();
-    };
 
     defaultBtn.addEventListener('change', (ev) => {
         const file = ev.target.files[0];
@@ -191,47 +389,47 @@ axios
     };
 
     renderImgColor();
-
-    function defaultBtnActiveColor(id, elem) {
-        const wrapper = elem.closest('.input-img-wrapper.flex-1');
-        const cancelBtn = wrapper.querySelector('.cancel-btn');
-        const fileName = wrapper.querySelector('.file-name');
-        const defaultBtn = wrapper.querySelector('.default-btn-color');
-        const customBtn = wrapper.querySelector('.custom-btn-color');
-        const img = wrapper.querySelector('img');
-
-        defaultBtn.click('#file-input', '#url-img');
-
-        defaultBtn.addEventListener('change', function () {
-            const file = this.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const result = reader.result;
-                    img.src = result;
-                    wrapper.classList.add('active');
-                    fileName.classList.add('active');
-                    cancelBtn.classList.add('active');
-                    customBtn.classList.add('hide');
-                };
-                cancelBtn.addEventListener('click', function () {
-                    img.src = '';
-                    wrapper.classList.remove('active');
-                    fileName.classList.remove('active');
-                    cancelBtn.classList.remove('active');
-                    customBtn.classList.remove('hide');
-                });
-
-                reader.readAsDataURL(file);
-            }
-            if (this.value) {
-                let valueStore = this.value.match(regExp);
-                fileName.textContent = valueStore;
-            }
-        });
-    }
 })();
+
+function defaultBtnActiveColor(id, elem) {
+    const wrapper = elem.closest('.input-img-wrapper.flex-1');
+    const cancelBtn = wrapper.querySelector('.cancel-btn');
+    const fileName = wrapper.querySelector('.file-name');
+    const defaultBtn = wrapper.querySelector('.default-btn-color');
+    const customBtn = wrapper.querySelector('.custom-btn-color');
+    const img = wrapper.querySelector('img');
+
+    defaultBtn.click('#file-input', '#url-img');
+
+    defaultBtn.addEventListener('change', function () {
+        const file = this.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = reader.result;
+                img.src = result;
+                wrapper.classList.add('active');
+                fileName.classList.add('active');
+                cancelBtn.classList.add('active');
+                customBtn.classList.add('hide');
+            };
+            cancelBtn.addEventListener('click', function () {
+                img.src = '';
+                wrapper.classList.remove('active');
+                fileName.classList.remove('active');
+                cancelBtn.classList.remove('active');
+                customBtn.classList.remove('hide');
+            });
+
+            reader.readAsDataURL(file);
+        }
+        if (this.value) {
+            let valueStore = this.value.match(regExp);
+            fileName.textContent = valueStore;
+        }
+    });
+}
 
 // chuyển file ảnh nhận vào thành url
 function imageToUrl(fileSelector, buttonSubmitSelector) {
@@ -266,8 +464,12 @@ function imageToUrl(fileSelector, buttonSubmitSelector) {
 }
 
 // Xử lý hiển thị danh sách quản lý
-(function () {
+function showDataInTable() {
     const tbody = document.querySelector('#tbody');
+
+    if (!tbody) {
+        return;
+    }
 
     const category = {
         products: categories,
@@ -282,36 +484,34 @@ function imageToUrl(fileSelector, buttonSubmitSelector) {
 
             let row = ``;
 
-            `
-			${this.products.forEach((product, i) => {
+            this.products.forEach((product, i) => {
                 row += `
-					<tr>
-						<td>${i + 1}</td> 
-						<td class="td-name">
-							<a class="table-name-link" href="./addProduct.html?id=${product.id}">${
-                    product.name
-                }</a>
-						</td>
-						<td>
-							<img
-								src="${product.icon}"
-								alt="${product.name}"
-							/>
-						</td>
-						<td>${product.createdAt}</td>
-						<td>${product.updatedAt}</td>
-						<td>${product.deletedAt}</td>
-						<td id="edit" class="actions-icon"><a href="./addProduct.html?id=${
+                <tr>
+                    <td>${i + 1}</td> 
+                    <td class="td-name">
+                        <a class="table-name-link" href="./addProduct.html?id=${
                             product.id
-                        }"><i class='bx bxs-message-square-edit'></i></a></td>
-						<td onclick="category.removeItem(${
-                            product.id
-                        })" id="remove" class="actions-icon"><i class='bx bxs-message-square-x'></i></td>
-					</tr>`;
+                        }">${product.name}</a>
+                    </td>
+                    <td>
+                        <img
+                            src="${product.icon}"
+                            alt="${product.name}"
+                        />
+                    </td>
+                    <td>${product.createdAt}</td>
+                    <td>${product.updatedAt}</td>
+                    <td>${product.deletedAt}</td>
+                    <td id="edit" class="actions-icon"><a href="./addProduct.html?id=${
+                        product.id
+                    }"><i class='bx bxs-message-square-edit'></i></a></td>
+                    <td onclick="category.removeItem(${
+                        product.id
+                    })" id="remove" class="actions-icon"><i class='bx bxs-message-square-x'></i></td>
+                </tr>`;
 
                 tbody.innerHTML = row;
-            })}
-			`;
+            });
         },
 
         removeItem(id) {
@@ -326,4 +526,44 @@ function imageToUrl(fileSelector, buttonSubmitSelector) {
             this.handleEvent();
         },
     };
-})();
+
+    category.start();
+}
+
+Validator({
+    form: '#add-product',
+    formGroupSelector: '.form-group',
+    errorSelector: '.form-message',
+    rules: [
+        Validator.isRequired('#name'),
+        Validator.isRequired('#price'),
+        Validator.minValue('#price', 1000),
+        Validator.isRequired('#description'),
+        Validator.maxLength('#description', 100),
+        Validator.isRequired('#url-img'),
+    ],
+    onSubmit(data) {
+        const rs = {
+            name: data.name,
+            icon: data['url-img'],
+        };
+
+        console.log(rs);
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        axios
+            .post('http://localhost:8080/categories', rs, config)
+            .then((response) => {
+                console.log(response.data);
+                goCategory();
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    },
+});
