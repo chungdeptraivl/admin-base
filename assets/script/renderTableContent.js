@@ -1,19 +1,24 @@
-const tbody = document.querySelector('#tbody');
+export function renderTableContent() {
+    const tbody = document.querySelector('#tbody');
 
-const category = {
-    products: [],
+    if(!tbody) {
+        return;
+    }
 
-    handleEvent() {},
+    const category = {
+        products: [],
 
-    renderCategory() {
-        if (this.products.length <= 0) {
-            tbody.innerHTML = 'Khong co danh sach san pham nao';
-            return;
-        }
+        handleEvent() {},
 
-        let row = ``;
+        renderCategory() {
+            if (this.products.length <= 0) {
+                tbody.innerHTML = 'Khong co du lieu nao';
+                return;
+            }
 
-        `
+            let row = ``;
+
+            `
         ${this.products.forEach((product, i) => {
             row += `
                 <tr>
@@ -43,29 +48,29 @@ const category = {
             tbody.innerHTML = row;
         })}
         `;
-    },
+        },
 
-    removeItem(id) {
-        let index = this.products.findIndex((item) => item.id === id);
-        this.products.splice(index, 1);
-        localStorage.setItem('products', JSON.stringify(this.products));
-        this.renderCategory();
-    },
+        removeItem(id) {
+            let index = this.products.findIndex((item) => item.id === id);
+            this.products.splice(index, 1);
+            localStorage.setItem('products', JSON.stringify(this.products));
+            this.renderCategory();
+        },
 
-    start() {
-        this.renderCategory();
-        this.handleEvent();
-    },
-};
+        start() {
+            this.renderCategory();
+            this.handleEvent();
+        },
+    };
 
-axios
-    .get('http://localhost:8080/categories')
-    .then((response) => {
-        console.log(response.data.data);
-        CATEGORIES = response.data.data;
-        category.products = response.data.data;
-        category.start();
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+    axios
+        .get('http://localhost:8080/categories')
+        .then((response) => {
+            console.log(response.data.data);
+            category.products = response.data.data;
+            category.start();
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+}

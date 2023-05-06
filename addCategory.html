@@ -14,10 +14,11 @@
 
         <!-- Link css -->
         <link rel="stylesheet" href="./assets/css/global.css" />
-        <link rel="stylesheet" href="./assets/css/addProduct.css" />
+        <link rel="stylesheet" href="./assets/css/formCreate.css" />
 
         <!-- Link js -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="./assets/script/constant.js"></script>
     </head>
 
     <body>
@@ -35,9 +36,9 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="./addProduct.html">
+                    <a href="./addCategory.html">
                         <i class="bx bxs-add-to-queue"></i>
-                        <span class="text">Add product</span>
+                        <span class="text">Add category</span>
                     </a>
                 </li>
                 <li>
@@ -111,13 +112,13 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Add New Product</h1>
+                        <h1>Add New Category</h1>
                         <ul class="breadcrumb">
                             <li><a href="./index.html">Dashboard</a></li>
                             <li><i class="bx bx-chevron-right"></i></li>
                             <li>
-                                <a href="./addProduct.html" class="active"
-                                    >Add product</a
+                                <a href="./addCategory.html" class="active"
+                                    >Add category</a
                                 >
                             </li>
                         </ul>
@@ -125,7 +126,7 @@
                 </div>
 
                 <!-- --------------------------- INNER --------------------------- -->
-                <form action="#" class="form-product" id="add-product">
+                <form action="#" class="crud-form" id="add-category">
                     <div class="left">
                         <div class="input-wrapper form-group">
                             <label for="name" class="input-label"
@@ -141,7 +142,7 @@
                             />
                             <span class="input-desc"
                                 >Do not exceed 20 characters when entering the
-                                product description</span
+                                category description</span
                             >
                             <span class="form-message"></span>
                         </div>
@@ -158,7 +159,7 @@
                                         <i class="bx bx-chevron-down"></i>
                                     </div>
                                     <ul id="material" class="dropdown-list">
-                                        <!-- Render in addProduct.js -->
+                                        <!-- Render in renderTableContent.js -->
                                     </ul>
                                 </div>
                                 <span class="form-message"></span>
@@ -190,7 +191,7 @@
                             ></textarea>
                             <span class="input-desc">
                                 Do not exceed 100 characters when entering the
-                                product description
+                                category description
                             </span>
                             <span class="form-message"></span>
                         </div>
@@ -198,7 +199,7 @@
                     <div class="right">
                         <div class="input-wrapper form-group">
                             <label class="input-label"
-                                >Product Images
+                                >Category Images
                                 <span class="red">*</span></label
                             >
                             <div class="input-img-wrapper">
@@ -249,7 +250,7 @@
                             style="margin: 24px 0"
                             disabled
                         >
-                            Add Product
+                            Add
                         </button>
                     </div>
                 </form>
@@ -258,6 +259,7 @@
         </section>
         <!-- CONTENT -->
 
-        <script src="./assets/script/main.js"></script>
+        <script type="module" src="./assets/script/main.js"></script>
+        <script type="module" src="./assets//script/validate.js"></script>
     </body>
 </html>

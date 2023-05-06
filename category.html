@@ -14,7 +14,7 @@
 
         <!-- Link css -->
         <link rel="stylesheet" href="./assets/css/global.css" />
-        <link rel="stylesheet" href="./assets/css/categories.css" />
+        <link rel="stylesheet" href="./assets/css/formCreate.css" />
 
         <!-- Link js -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -34,9 +34,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="./addProduct.html">
+                    <a href="./addCategory.html">
                         <i class="bx bxs-add-to-queue"></i>
-                        <span class="text">Add product</span>
+                        <span class="text">Add category</span>
                     </a>
                 </li>
                 <li class="active">
@@ -112,7 +112,9 @@
                     <div class="left">
                         <h1>Category</h1>
                         <ul class="breadcrumb">
-                            <li><a href="./addProduct.html">Add Product</a></li>
+                            <li>
+                                <a href="./addCategory.html">Add Categories</a>
+                            </li>
                             <li><i class="bx bx-chevron-right"></i></li>
                             <li>
                                 <a href="./category.html" class="active"
@@ -122,14 +124,14 @@
                         </ul>
                     </div>
                     <a
-                        href="./addProduct.html"
+                        href="./addCategory.html"
                         class="add-product active not-select"
                         id="add-product"
                     >
                         <div class="add-product-icon">
                             <i class="bx bx-add-to-queue"></i>
                         </div>
-                        Add new product
+                        Add new category
                     </a>
                 </div>
 
@@ -155,6 +157,6 @@
         </section>
         <!-- CONTENT -->
 
-        <script src="./assets/script/main.js"></script>
+        <script type="module" src="./assets/script/main.js"></script>
     </body>
 </html>
