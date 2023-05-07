@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"
+            integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        ></script>
+    </head>
+    <body>
+        <form id="form" method="post" action="index.html">
+            <input
+                type="text"
+                name="vnp_OrderInfo"
+                placeholder="vnp_OrderInfo"
+                value="Nap tien cho thue bao 0123456789. So tien 100,000 VND"
+            />
+            <input
+                type="text"
+                name="vnp_Amount"
+                placeholder="vnp_OrderInfo"
+                value="10000"
+            />
+            <input type="text" name="vnp_OrderType" value="electric" />
+            <input type="text" name="vnp_Locale" value="vn" />
+            <button>Submit</button>
+        </form>
+        <script>
+            $('#form').submit(function () {
+                var postData = $('#form').serialize();
+                var submitUrl = $('#form').attr('action');
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/api/vnpay/make',
+                    data: postData,
+                    dataType: 'JSON',
+                    success: function (x) {
+                        let data = JSON.parse(JSON.stringify(x));
+                        window.location.href = data['redirect_url'];
+                    },
+                });
+                return false;
+            });
+        </script>
+    </body>
+</html>
